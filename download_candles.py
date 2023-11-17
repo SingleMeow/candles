@@ -8,7 +8,7 @@ from tinkoff.invest.utils import now
 
 def download_candles(instrument_figi):
 
-    TOKEN = "t.2Lq4ecGAavhC062SXymeQkDK6gdMa5tO-lnI5RMYsCKyLId4MkFEQoF5_wI0sqHNGp7-kCwAyvreG31eCWBF-A"
+    TOKEN = "Token"
 
     candle_intervals = {
     "1m": [CandleInterval.CANDLE_INTERVAL_1_MIN, "1 минута"],
