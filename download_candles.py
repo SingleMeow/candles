@@ -1,5 +1,7 @@
 import pandas as pd
 import pytz
+import time
+import os 
 from datetime import datetime, timedelta
 
 from tinkoff.invest import CandleInterval, Client
@@ -8,7 +10,7 @@ from tinkoff.invest.utils import now
 
 def download_candles(instrument_figi):
 
-    TOKEN = "Token"
+    TOKEN = os.environ["INVEST_TOKEN"]
 
     candle_intervals = {
     "1m": [CandleInterval.CANDLE_INTERVAL_1_MIN, "1 минута"],
@@ -26,12 +28,18 @@ def download_candles(instrument_figi):
     "1M": [CandleInterval.CANDLE_INTERVAL_MONTH, "1 месяц"]}
     
     def window_select(interval):
-        if interval in ('1m', '2m', '3m', '5m', '10m', '30m', '1h'):
+        if interval in ('1m', '2m', '3m', '5m', '10m', '15m'):
             td = timedelta(days = 1)
+        elif interval  == '30m':
+            td = timedelta(days = 2)
+        elif interval  == '1h':
+            td = timedelta(days = 7)
         elif interval in ('2h', '4h'):
             td = timedelta(days = 30)
-        else:
+        elif interval == '1d':
             td = timedelta(days = 365)
+        else:
+            td = timedelta(days = 365*2)
         return td
     
     def create_df(candles):
@@ -63,15 +71,21 @@ def download_candles(instrument_figi):
     data = pd.DataFrame()
     
     with Client(TOKEN) as client:
-        while start_dt < now():
+        n_requests = 0
+        while (start_dt < now()):
+
             data = pd.concat([data, create_df(client.get_all_candles(
-                figi = instrument_figi,
+                instrument_id = instrument_figi,
                 from_ = start_dt,
                 to = start_dt + td,
                 interval = candle_intervals[intval][0]
             ))])
-            start_dt = start_dt + td
-        return data
 
-if __name__ == "__main__":
-    data = download_candles('BBG00Z7002T8')
+            start_dt = start_dt + td
+
+            if n_requests <= 290:
+                n_requests += 1
+            else:
+                n_requests = 0
+                time.sleep(60)
+        return data
