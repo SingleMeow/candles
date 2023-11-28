@@ -1,7 +1,6 @@
 
 import logging
 import os
-
 from pandas import DataFrame
 
 from tinkoff.invest import Client, SecurityTradingStatus

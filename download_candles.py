@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 from tinkoff.invest import CandleInterval, Client
 from tinkoff.invest.utils import now
 
-
 def download_candles(instrument_figi):
 
     TOKEN = os.environ["INVEST_TOKEN"]
