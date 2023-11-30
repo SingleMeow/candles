@@ -9,6 +9,7 @@ from tinkoff.invest.utils import now
 
 def download_candles(instrument_figi):
 
+    os.environ["INVEST_TOKEN"] = "t.2Lq4ecGAavhC062SXymeQkDK6gdMa5tO-lnI5RMYsCKyLId4MkFEQoF5_wI0sqHNGp7-kCwAyvreG31eCWBF-A"
     TOKEN = os.environ["INVEST_TOKEN"]
 
     candle_intervals = {
@@ -87,4 +88,6 @@ def download_candles(instrument_figi):
             else:
                 n_requests = 0
                 time.sleep(60)
+
+        data = data.reset_index(drop = True)
         return data
