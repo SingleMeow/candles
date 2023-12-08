@@ -6,4 +6,4 @@ import pandas as pd
 
 
 df = download_candles('BBG004730N88')
-df.to_csv('Данные торгов СБЕР 15 мин.csv')
+df.to_csv('Данные торгов СБЕР 4 часа.csv')
